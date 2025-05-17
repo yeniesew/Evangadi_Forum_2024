@@ -1,85 +1,62 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "./footer.module.css";
-import FacebookOutlined from "@mui/icons-material/FacebookOutlined";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import YouTubeIcon from "@mui/icons-material/YouTube";
+// import React from "react";
+import style from "./footer.module.css";
+import logo from "../../Assets/evangadiwhiteLogo.png";
+import { FaFacebookF } from "react-icons/fa";
+import { TiSocialInstagram } from "react-icons/ti";
 import { Link } from "react-router-dom";
-import footerLogo from "../../Assets/Images/evangadi-logo-footer.png";
+import { FaYoutube } from "react-icons/fa6";
 
 function Footer() {
   return (
-    <div className={classes.footer}>
-      <div>
-        <div className={classes.footer_logo}>
-          <Link to="/">
-            <img
-              src={footerLogo}
-              alt=" evangagadi logo"
-            />
-          </Link>
-        </div>
-        <div className={classes.footer_icons}>
-          <a href="https://www.facebook.com/evangaditech" target="_blank">
-            <FacebookOutlined style={{ fontSize: "35px" }} />
-          </a>
-          <a href="https://www.instagram.com/evangaditech/" target="_blank">
-            <InstagramIcon style={{ fontSize: "35px" }} />
-          </a>
-          <a href="https://www.youtube.com/@EvangadiTech" target="_blank">
-            <YouTubeIcon style={{ fontSize: "40px" }} />
-          </a>
-        </div>
-      </div>
-      <div className={classes.footer_links}>
-                 <h4 style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>
-                 Useful Links
-          </h4>
-        <ul className={classes.footer_ul}>
-          <li className={classes.term}>
-            <Link
-              to="/howitworks"
-              style={{
-                textDecoration: "none",
-                color: "#959CA4",
-                paddingLeft: "0",
-              }}
-            >
-              How it works
+    <section className={style.footer_container}>
+      <section className={style.footer_inner_container}>
+        {/* left side links wrapper */}
+        <div className={style.left_side_links}>
+          <div className={style.footer_logo}>
+            <Link to="/">
+              <img src={logo} alt="" />
             </Link>
-          </li>
-          <li className={classes.term}>
-            <Link
-              to="/Terms/"
-              style={{
-                textDecoration: "none",
-                color: "#959CA4",
-                paddingLeft: "0",
-              }}
-            >
-              Terms of Serivce
+          </div>
+          <div className={style.footer_icons}>
+            <Link to="https://www.facebook.com/evangaditech" target="_blank">
+              <FaFacebookF size={38} />
             </Link>
-          </li>
-          <li className={classes.privacy}>
-            <Link
-              to="/PrivacyPolicy"
-              style={{ textDecoration: "none", color: "#959CA4" }}
-            >
+            <Link to="https://www.instagram.com/evangaditech" target="_blank">
+              <TiSocialInstagram size={38} />
+            </Link>
+            <Link to="https://www.youtube.com/@EvangadiTech" target="_blank">
+              <FaYoutube size={38} />
+            </Link>
+          </div>
+        </div>
+        {/* middle links wrapper */}
+        <div className={style.middle_links}>
+          <h4>Useful link</h4>
+          <p>
+            <Link to="/howItWorks">How it Works</Link>
+          </p>
+          <p>
+            <Link to="https://www.evangadi.com/legal/terms/" target="_blank">
+              Terms of Service
+            </Link>
+          </p>
+          <p>
+            <Link to="https://www.evangadi.com/legal/privacy/" target="_blank">
               Privacy policy
             </Link>
-          </li>
-        </ul>
-      </div>
-      <div className={classes.footer_contacts}>
-          <h4 style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>
-            Contact Info
-          </h4>
-          <ul className={classes.footer_ul}>
-          <li>Evangadi Networks</li>
-          <li>support@evangadi.com</li>
-          <li>+1-202-386-2702</li>
-        </ul>
-      </div>
-    </div>
+          </p>
+        </div>
+        {/* right side links wrapper */}
+        <div className={style.right_side_links}>
+          <h4>Contact Info</h4>
+          <p>
+            <Link to="/">Evangadi Networks</Link>
+          </p>
+          <p>support@evangadi.com</p>
+          <p>+1-202-386-2702</p>
+        </div>
+      </section>
+    </section>
   );
 }
 

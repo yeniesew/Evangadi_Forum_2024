@@ -1,85 +1,79 @@
-import { useContext } from "react";
-import classes from "./header.module.css";
-import EvangadiLogo from "../../Assets/Images/evangadi-logo-header.png";
-import { Link, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav, Button, Container } from "react-bootstrap";
-import { UserState } from "../../App.jsx";
+// Header.jsx
+import React, { useContext, useState } from "react";
+import EvangadiLogo from "../../assets/evangadiBlackLogo.png";
+import styles from "./header.module.css";
+import { Link } from "react-router-dom";
+import { AppState } from "../../App";
+import { RiMenu3Line } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+const Header = () => {
+  const { user, setUser } = useContext(AppState);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-function Header() {
-  const { user, setUser } = useContext(UserState);
-  const userId = user?.userid;
-  const navigate = useNavigate();
-
-  const handleSignOut = () => {
-    localStorage.removeItem("EVANGADI_FORUM_2024");
-    setUser({});
-    navigate("/auth");
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
-
+  const navigate = useNavigate();
+  function handleSignOut() {
+    setUser({});
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  }
   return (
-    <>
-      <Navbar
-        bg="light "
-        variant="light"
-        expand="md"
-        className="px-3"
-        style={{
-          position: "sticky",
-          top: "0",
-          zIndex: "3",
-          backgroundColor: "white",
-          borderBottom: "1px solid #dee2e6",
-        }}
-      >
-        <Container className={classes.header_container}>
-          <Navbar.Brand>
-            <img
-              src={EvangadiLogo}
-              className="d-inline-block align-top"
-              alt="Evangadi Logo"
-              width="200"
-            />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav  d-md-none">
-            <span className="navbar-toggler-icon"></span>
-          </Navbar.Toggle>
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className=" w-50 flex-md-row"
-            style={{ alignSelf: "flex-end" }}
-          >
-            <Nav className="flex-column flex-md-row w-100 justify-content-end nav-links-holder">
-              <Nav.Link as={Link} to="/" className={classes.navigation_links}>
-                Home
-              </Nav.Link>
-
-              <Nav.Link
-                as={Link}
-                to="/howitworks"
-                className={classes.navigation_links}
-              >
-                How it Works
-              </Nav.Link>
-              {userId ? (
-                <Button onClick={handleSignOut} className={classes.logout_btn}>
-                  Logout
-                </Button>
-              ) : (
-                <Nav.Link
-                  as={Link}
-                  to="/auth"
-                  className={`${classes.navigation_links} ${classes.login_btn}`}
+    <div className={styles.header}>
+      <div className={styles.header_container}>
+        <div className={styles.header_logo}>
+          <Link to={user.username ? "/home" : "/"}>
+            <img src={EvangadiLogo} alt="Evangadi Logo" />
+          </Link>
+        </div>
+        <div
+          className={styles.hamburger}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <RiMenu3Line />
+        </div>
+        <div
+          className={`${styles.header_right} ${
+            isMenuOpen ? styles.active : ""
+          }`}
+        >
+          <nav>
+            <ul>
+              <li className={styles.home}>
+                <Link
+                  to={user.username ? "/home" : "/"}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  Login
-                </Nav.Link>
+                  Home
+                </Link>
+              </li>
+              <li className={styles.work}>
+                <Link to="/howItWorks" onClick={() => setIsMenuOpen(false)}>
+                  How it Works
+                </Link>
+              </li>
+              {user.username ? (
+                <Link to="/" className={styles.button} onClick={handleSignOut}>
+                  SIGN OUT
+                </Link>
+              ) : (
+                <Link
+                  to="https://www.evangadi.com/"
+                  className={styles.join}
+                  target="_blank"
+                >
+                  JOIN THE COMMUNITY
+                </Link>
               )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default Header;

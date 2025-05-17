@@ -1,37 +1,54 @@
-import { createContext, useEffect, useState } from "react";
-import { RouterProvider } from "react-router-dom";
-import { axiosInstance } from "./utility/axios";
-import { Router } from "./Router.jsx";
+import "./App.css";
+import { useState, useEffect, createContext } from "react";
+import Router from "./Router";
+import axios from "./Api/axios";
 
-export const UserState = createContext(); // Create a context for the user data
-
+export const AppState = createContext();
 function App() {
   const [user, setUser] = useState({});
+  const [currentQuestions, setCurrentQuestions] = useState([]);
+  const [currentAnswers, setCurrentAnswers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+    const [display, setDisplay] = useState(false);
+  const token = localStorage.getItem("token");
+  const userOnStorage = localStorage.getItem("user");
 
-  const getUserData = async () => {
+  async function checkUser() {
     try {
-      const token = localStorage.getItem("EVANGADI_FORUM_2024"); // Get the token stored during login from local storage
-      if (token) {
-        const userData = await axiosInstance
-          .get("/user/check", { headers: { Authorization: "Bearer " + token } })
-          .then((response) => response.data);
-        setUser(userData); // Store the user data in state so that it can be accessed by others too
-      } else {
-        console.log("not authorized");
-      }
+      const { data } = await axios.get("/users/check", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUser(data);
+
+      localStorage.setItem("user", JSON.stringify(data));
     } catch (error) {
-      console.log(error);
+      localStorage.removeItem("user");
+      setUser({});
     }
-  };
+  }
 
   useEffect(() => {
-    getUserData();
-  }, []);
-
+    checkUser();
+  }, [token, userOnStorage]);
+  const values = {
+    user,
+    setUser,
+    currentQuestions,
+    setCurrentQuestions,
+    currentPage,
+    setCurrentPage,
+    currentAnswers,
+    setCurrentAnswers,
+    display,
+    setDisplay,
+  };
   return (
-    <UserState.Provider value={{ user, setUser }}>
-      <RouterProvider router={Router} />
-    </UserState.Provider>
+    <AppState.Provider value={values}>
+      <Router />
+    </AppState.Provider>
   );
 }
 
